@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FRA-Intel - Claims Database</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/4d6b3f02d1.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-green-50 text-gray-800 min-h-screen flex font-sans">
+
+  <!-- Sidebar -->
+  <aside class="w-1/5 min-w-[220px] bg-green-800 text-white shadow-lg flex flex-col justify-between p-6">
+    <div>
+      <div class="flex items-center gap-3">
+        <div class="text-3xl">📡</div>
+        <h1 class="text-xl font-bold">Sampoorna</h1>
+      </div>
+      <p class="text-green-200 text-xs mt-1">Mission Control</p>
+
+      <!-- Navigation -->
+      <nav class="mt-6 flex flex-col gap-2 text-sm">
+        <a href="https://ananyaahujatech.github.io/webgis/" class="px-3 py-2 rounded-lg hover:bg-green-700 block">🗺 FRA Atlas</a>
+        <a href="upload.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">📄 Document Upload</a>
+        <a href="dashboard.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">📊 Dashboard</a>
+        <a href="layers.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">🛰 Asset Layers</a>
+        <a href="claims.html" class="px-3 py-2 rounded-lg bg-green-600 block">📂 Claims Database</a>
+        <p class="mt-4 text-green-300 text-xs uppercase">System</p>
+        <a href="status.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">💻 System Status</a>
+        <a href="settings.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">⚙️ Settings</a>
+      </nav>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-xs text-green-200">
+      <p>Status: <span class="text-green-400">● Online</span></p>
+      <p>Version: v1.0.0</p>
+      <p>Environment: Development</p>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 space-y-6 overflow-auto">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-green-700">Claims Database</h2>
+      <button class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-sm text-white flex items-center gap-2 shadow">
+        <i class="fas fa-file-export"></i> Export Data
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+        <p class="text-sm text-gray-500">Total Claims</p>
+        <h2 class="text-2xl font-bold text-green-700">2</h2>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+        <p class="text-sm text-gray-500">Verified</p>
+        <h2 class="text-2xl font-bold text-green-600">2</h2>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+        <p class="text-sm text-gray-500">Pending</p>
+        <h2 class="text-2xl font-bold text-yellow-600">0</h2>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+        <p class="text-sm text-gray-500">Under Review</p>
+        <h2 class="text-2xl font-bold text-purple-600">0</h2>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-xl p-4 shadow border border-green-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex gap-3">
+        <input type="text" placeholder="🔍 Search claims" 
+          class="px-3 py-2 rounded-lg border border-green-300 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"/>
+        <select class="px-3 py-2 rounded-lg border border-green-300 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <option>All Status</option>
+          <option>Verified</option>
+          <option>Pending</option>
+          <option>Under Review</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Claims Table -->
+    <div class="bg-white rounded-xl shadow border border-green-200 overflow-hidden">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-green-100 text-green-700 uppercase text-xs">
+          <tr>
+            <th class="px-4 py-3">Holder Name</th>
+            <th class="px-4 py-3">Village</th>
+            <th class="px-4 py-3">District</th>
+            <th class="px-4 py-3">Area</th>
+            <th class="px-4 py-3">Status</th>
+            <th class="px-4 py-3">Date</th>
+            <th class="px-4 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-green-100">
+          <tr class="hover:bg-green-50">
+            <td class="px-4 py-3">
+              <p class="font-medium text-gray-800">Sundar Kumar</p>
+              <p class="text-xs text-gray-500">Harishankar</p>
+            </td>
+            <td class="px-4 py-3">Jharbeda</td>
+            <td class="px-4 py-3">Sundargarh</td>
+            <td class="px-4 py-3">2.45 acres</td>
+            <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700 border border-green-300">✔ Verified</span></td>
+            <td class="px-4 py-3">24/9/2025</td>
+            <td class="px-4 py-3 flex gap-2">
+              <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+              <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr class="hover:bg-green-50">
+            <td class="px-4 py-3">
+              <p class="font-medium text-gray-800">Test User</p>
+              <p class="text-xs text-gray-500">Test Father</p>
+            </td>
+            <td class="px-4 py-3">Test Village</td>
+            <td class="px-4 py-3">Test District</td>
+            <td class="px-4 py-3">1.5 acres</td>
+            <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700 border border-green-300">✔ Verified</span></td>
+            <td class="px-4 py-3">19/9/2025</td>
+            <td class="px-4 py-3 flex gap-2">
+              <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+              <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="px-4 py-3 text-gray-600 text-sm flex justify-between bg-green-50 border-t border-green-200">
+        <span>Showing 1 to 2 of 2 results</span>
+        <span>Page 1 of 1</span>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FRA-Intel Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside class="w-1/5 min-w-[220px] bg-green-900 text-white shadow-xl flex flex-col justify-between p-6">
+    <div>
+      <div class="flex items-center gap-3">
+        <div class="text-3xl">📡</div>
+        <h1 class="text-xl font-bold">Sampoorna</h1>
+      </div>
+      <p class="text-gray-300 text-xs mt-1">Mission Control</p>
+
+      <!-- Navigation -->
+      <nav class="mt-6 flex flex-col gap-2 text-sm">
+        <a href="https://ananyaahujatech.github.io/webgis/" class="px-3 py-2 rounded-lg hover:bg-green-800 block">🗺 FRA Atlas</a>
+        <a href="upload.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">📄 Document Upload</a>
+        <a href="dashboard.html" class="px-3 py-2 rounded-lg bg-green-700 block">📊 Dashboard</a>
+        <a href="layers.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">🛰 Asset Layers</a>
+        <a href="claims.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">📂 Claims Database</a>
+        <p class="mt-4 text-gray-400 text-xs uppercase">System</p>
+        <a href="status.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">💻 System Status</a>
+        <a href="settings.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">⚙️ Settings</a>
+      </nav>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-xs text-gray-300">
+      <p>Status: <span class="text-green-400">● Online</span></p>
+      <p>Version: v1.0.0</p>
+      <p>Environment: Development</p>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 space-y-6 overflow-auto bg-gray-50">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-green-800">Mission Control Dashboard</h2>
+      <div class="flex items-center gap-3">
+        <input type="text" placeholder="🔍 Search claims, villages..." class="px-3 py-1.5 rounded border border-gray-300 text-sm focus:outline-none"/>
+        <a href="upload.html" class="px-3 py-2 rounded bg-green-600 hover:bg-green-500 text-sm text-white">⬆ Upload</a>
+        <a href="notifications.html">🔔<span class="text-red-500 text-xs">2</span></a>
+        <a href="profile.html">👤</a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid md:grid-cols-4 gap-4">
+      <div class="bg-white border border-green-200 rounded-xl p-4 shadow">
+        <p class="text-gray-600 text-sm">📄 Total Claims</p>
+        <h2 class="text-2xl font-bold text-green-700">10</h2>
+        <p class="text-green-600 text-xs">+12% • All FRA claims processed</p>
+      </div>
+      <div class="bg-white border border-green-200 rounded-xl p-4 shadow">
+        <p class="text-gray-600 text-sm">✅ Verified Claims</p>
+        <h2 class="text-2xl font-bold text-green-700">8</h2>
+        <p class="text-green-600 text-xs">+8% • Successfully processed</p>
+      </div>
+      <div class="bg-white border border-green-200 rounded-xl p-4 shadow">
+        <p class="text-gray-600 text-sm">⏳ Pending Claims</p>
+        <h2 class="text-2xl font-bold text-green-700">2</h2>
+        <p class="text-red-500 text-xs">-5% • Awaiting review</p>
+      </div>
+      <div class="bg-white border border-green-200 rounded-xl p-4 shadow">
+        <p class="text-gray-600 text-sm">👥 Villages</p>
+        <h2 class="text-2xl font-bold text-green-700">2</h2>
+        <p class="text-green-600 text-xs">+15% • Active locations</p>
+      </div>
+    </div>
+
+    <!-- Recent Activity + Quick Actions -->
+    <div class="grid md:grid-cols-3 gap-4">
+      <!-- Recent Activity -->
+      <div class="bg-white border border-green-200 rounded-xl p-4 space-y-3 shadow md:col-span-2">
+        <h3 class="text-green-700 font-semibold">Recent Activity</h3>
+        <ul class="text-sm space-y-2">
+          <li>✅ FRA Claim verified for Ramesh Kumar Bhil <span class="text-gray-500">• 2 hours ago</span></li>
+          <li>📄 New document uploaded for Jeypore village <span class="text-gray-500">• 4 hours ago</span></li>
+          <li>⏳ Claim under review for Laxmi Paraja <span class="text-gray-500">• 6 hours ago</span></li>
+          <li>⚡ DSS recommendations updated for 2 villages <span class="text-gray-500">• 8 hours ago</span></li>
+        </ul>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="bg-white border border-green-200 rounded-xl p-4 space-y-3 shadow">
+        <h3 class="text-green-700 font-semibold">Quick Actions</h3>
+        <a href="upload.html" class="w-full block text-center px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm">📄 Upload Document</a>
+        <a href="https://ananyaahujatech.github.io/webgis/" class="w-full block text-center px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white text-sm">🗺 View Atlas</a>
+        <a href="report.html" class="w-full block text-center px-4 py-2 rounded-lg bg-green-700 hover:bg-green-800 text-white text-sm">📊 Generate Report</a>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FRA-Intel - Assets Database</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/4d6b3f02d1.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-green-50 text-gray-800 min-h-screen flex font-sans">
+
+  <!-- Sidebar -->
+  <aside class="w-1/5 min-w-[220px] bg-green-800 text-white shadow-lg flex flex-col justify-between p-6">
+    <div>
+      <div class="flex items-center gap-3">
+        <div class="text-3xl">🌱</div>
+        <h1 class="text-xl font-bold">Sampoorna</h1>
+      </div>
+      <p class="text-green-200 text-xs mt-1">Mission Control</p>
+
+      <!-- Navigation -->
+      <nav class="mt-6 flex flex-col gap-2 text-sm">
+        <a href="https://ananyaahujatech.github.io/webgis/" class="px-3 py-2 rounded-lg hover:bg-green-700 block">🗺 FRA Atlas</a>
+        <a href="upload.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">📄 Document Upload</a>
+        <a href="dashboard.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">📊 Dashboard</a>
+        <a href="assets.html" class="px-3 py-2 rounded-lg bg-green-600 block">🛰 Assets Database</a>
+        <a href="claims.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">📂 Claims Database</a>
+        <p class="mt-4 text-green-300 text-xs uppercase">System</p>
+        <a href="status.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">💻 System Status</a>
+        <a href="settings.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">⚙️ Settings</a>
+      </nav>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-xs text-green-200">
+      <p>Status: <span class="text-green-400">● Online</span></p>
+      <p>Version: v1.0.0</p>
+      <p>Environment: Development</p>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 space-y-6 overflow-auto">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-green-700">Assets Database</h2>
+      <button onclick="exportAssets()" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-sm text-white flex items-center gap-2 shadow">
+        <i class="fas fa-file-export"></i> Export Data
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+        <p class="text-sm text-gray-500">Total Assets</p>
+        <h2 class="text-2xl font-bold text-green-700">12</h2>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+        <p class="text-sm text-gray-500">Natural Assets</p>
+        <h2 class="text-2xl font-bold text-green-600">8</h2>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+        <p class="text-sm text-gray-500">Infrastructure</p>
+        <h2 class="text-2xl font-bold text-blue-600">4</h2>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+        <p class="text-sm text-gray-500">Seasonal Records</p>
+        <h2 class="text-2xl font-bold text-purple-600">5</h2>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-xl p-4 shadow border border-green-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex gap-3">
+        <input id="search" type="text" placeholder="🔍 Search assets" 
+          class="px-3 py-2 rounded-lg border border-green-300 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"/>
+        <select id="assetTypeFilter" class="px-3 py-2 rounded-lg border border-green-300 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <option>All Types</option>
+          <option>Cropland</option>
+          <option>Forest</option>
+          <option>Water</option>
+          <option>Borewell</option>
+          <option>School</option>
+          <option>Temple</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Assets Table -->
+    <div class="bg-white rounded-xl shadow border border-green-200 overflow-auto">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-green-100 text-green-700 uppercase text-xs">
+          <tr>
+            <th class="px-4 py-3">Asset ID</th>
+            <th class="px-4 py-3">Type</th>
+            <th class="px-4 py-3">Geometry</th>
+            <th class="px-4 py-3">Village ID</th>
+            <th class="px-4 py-3">District ID</th>
+            <th class="px-4 py-3">Area</th>
+            <th class="px-4 py-3">Humidity</th>
+            <th class="px-4 py-3">Temperature</th>
+            <th class="px-4 py-3">Soil Moisture</th>
+            <th class="px-4 py-3">Season</th>
+            <th class="px-4 py-3">Date</th>
+            <th class="px-4 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="assets-body" class="divide-y divide-green-100">
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A001</td>
+    <td class="px-4 py-3">Cropland</td>
+    <td class="px-4 py-3">Polygon</td>
+    <td class="px-4 py-3">V101</td>
+    <td class="px-4 py-3">D10</td>
+    <td class="px-4 py-3">3.2 acres</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Low</td>
+    <td class="px-4 py-3">Winter</td>
+    <td class="px-4 py-3">2025-09-20</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A002</td>
+    <td class="px-4 py-3">Forest</td>
+    <td class="px-4 py-3">Polygon</td>
+    <td class="px-4 py-3">V102</td>
+    <td class="px-4 py-3">D11</td>
+    <td class="px-4 py-3">12 acres</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Low</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Summer</td>
+    <td class="px-4 py-3">2025-09-21</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A003</td>
+    <td class="px-4 py-3">Water Body</td>
+    <td class="px-4 py-3">Polygon</td>
+    <td class="px-4 py-3">V103</td>
+    <td class="px-4 py-3">D10</td>
+    <td class="px-4 py-3">5 acres</td>
+    <td class="px-4 py-3">Low</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Winter</td>
+    <td class="px-4 py-3">2025-09-19</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A004</td>
+    <td class="px-4 py-3">Homestead</td>
+    <td class="px-4 py-3">Polygon</td>
+    <td class="px-4 py-3">V104</td>
+    <td class="px-4 py-3">D12</td>
+    <td class="px-4 py-3">1.2 acres</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Summer</td>
+    <td class="px-4 py-3">2025-09-18</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A005</td>
+    <td class="px-4 py-3">Forest</td>
+    <td class="px-4 py-3">Polygon</td>
+    <td class="px-4 py-3">V105</td>
+    <td class="px-4 py-3">D13</td>
+    <td class="px-4 py-3">8 acres</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Monsoon</td>
+    <td class="px-4 py-3">2025-09-22</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A006</td>
+    <td class="px-4 py-3">Cropland</td>
+    <td class="px-4 py-3">Polygon</td>
+    <td class="px-4 py-3">V106</td>
+    <td class="px-4 py-3">D14</td>
+    <td class="px-4 py-3">4 acres</td>
+    <td class="px-4 py-3">Low</td>
+    <td class="px-4 py-3">Low</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Summer</td>
+    <td class="px-4 py-3">2025-09-17</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A007</td>
+    <td class="px-4 py-3">Water Body</td>
+    <td class="px-4 py-3">Polygon</td>
+    <td class="px-4 py-3">V107</td>
+    <td class="px-4 py-3">D15</td>
+    <td class="px-4 py-3">6 acres</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Low</td>
+    <td class="px-4 py-3">Winter</td>
+    <td class="px-4 py-3">2025-09-16</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A008</td>
+    <td class="px-4 py-3">Forest</td>
+    <td class="px-4 py-3">Polygon</td>
+    <td class="px-4 py-3">V108</td>
+    <td class="px-4 py-3">D16</td>
+    <td class="px-4 py-3">10 acres</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Monsoon</td>
+    <td class="px-4 py-3">2025-09-15</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+
+  <!-- Infrastructure Assets -->
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A009</td>
+    <td class="px-4 py-3">School</td>
+    <td class="px-4 py-3">Point</td>
+    <td class="px-4 py-3">V109</td>
+    <td class="px-4 py-3">D10</td>
+    <td class="px-4 py-3">N/A</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Monsoon</td>
+    <td class="px-4 py-3">2025-09-14</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A010</td>
+    <td class="px-4 py-3">Borewell</td>
+    <td class="px-4 py-3">Point</td>
+    <td class="px-4 py-3">V110</td>
+    <td class="px-4 py-3">D11</td>
+    <td class="px-4 py-3">N/A</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Low</td>
+    <td class="px-4 py-3">Winter</td>
+    <td class="px-4 py-3">2025-09-13</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A011</td>
+    <td class="px-4 py-3">Temple</td>
+    <td class="px-4 py-3">Point</td>
+    <td class="px-4 py-3">V111</td>
+    <td class="px-4 py-3">D12</td>
+    <td class="px-4 py-3">N/A</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">Summer</td>
+    <td class="px-4 py-3">2025-09-12</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+  <tr class="hover:bg-green-50">
+    <td class="px-4 py-3">A012</td>
+    <td class="px-4 py-3">Temple</td>
+    <td class="px-4 py-3">Point</td>
+    <td class="px-4 py-3">V112</td>
+    <td class="px-4 py-3">D13</td>
+    <td class="px-4 py-3">N/A</td>
+    <td class="px-4 py-3">Low</td>
+    <td class="px-4 py-3">Moderate</td>
+    <td class="px-4 py-3">High</td>
+    <td class="px-4 py-3">Summer</td>
+    <td class="px-4 py-3">2025-09-11</td>
+    <td class="px-4 py-3 flex gap-2">
+      <button class="text-green-600 hover:text-green-800"><i class="fas fa-edit"></i></button>
+      <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>
+</tbody>
+
+      </table>
+      <div class="px-4 py-3 text-gray-600 text-sm flex justify-between bg-green-50 border-t border-green-200">
+        <span>Showing 1 to 12 of 12 results</span>
+        <span>Page 1 of 1</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JS -->
+  <script>
+    function exportAssets() {
+      const data = [
+        ["AssetID","Type","Geometry","VillageID","DistrictID","Area","Humidity","Temperature","SoilMoisture","Season","Date"],
+        ["A001","Cropland","Polygon","V101","D10","3.2 acres","High","Moderate","Low","Kharif","2025-09-20"],
+        ["A002","Forest","Polygon","V102","D10","5.1 acres","Moderate","Low","Moderate","Rabi","2025-09-18"],
+        ["A003","Water Body","Polygon","V103","D11","2.8 acres","Low","High","High","Kharif","2025-09-19"],
+        ["A004","Homestead","Polygon","V104","D12","1.2 acres","High","High","Moderate","Rabi","2025-09-17"],
+        ["A005","Cropland","Polygon","V105","D11","4.0 acres","Moderate","Moderate","High","Kharif","2025-09-16"],
+        ["A006","Forest","Polygon","V106","D12","6.5 acres","Low","Low","Moderate","Rabi","2025-09-15"],
+        ["A007","Water Body","Polygon","V107","D13","3.7 acres","High","Low","High","Kharif","2025-09-14"],
+        ["A008","Cropland","Polygon","V108","D13","2.9 acres","Moderate","High","Moderate","Rabi","2025-09-13"],
+        ["A009","School","Point","V109","D14","N/A","N/A","N/A","N/A","N/A","2025-09-12"],
+        ["A010","Temple","Point","V110","D14","N/A","N/A","N/A","N/A","N/A","2025-09-11"],
+        ["A011","Borewell","Point","V111","D15","N/A","N/A","N/A","N/A","N/A","2025-09-10"],
+        ["A012","Health Center","Point","V112","D15","N/A","N/A","N/A","N/A","N/A","2025-09-09"]
+      ];
+      const csv = data.map(r => r.join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "assets.csv";
+      a.click();
+    }
+  </script>
+</body>
+</html>

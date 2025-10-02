@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FRA-Intel - Extract Data</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside class="w-1/5 min-w-[220px] bg-green-900 text-white shadow-xl flex flex-col justify-between p-6">
+    <div>
+      <div class="flex items-center gap-3">
+        <div class="text-3xl">📡</div>
+        <h1 class="text-xl font-bold">Sampoorna</h1>
+      </div>
+      <p class="text-gray-300 text-xs mt-1">Mission Control</p>
+
+      <!-- Navigation -->
+      <nav class="mt-6 flex flex-col gap-2 text-sm">
+        <a href="https://ananyaahujatech.github.io/webgis/" class="px-3 py-2 rounded-lg hover:bg-green-800 block">🗺 FRA Atlas</a>
+        <a href="upload.html" class="px-3 py-2 rounded-lg bg-green-700 block">📄 Document Upload</a>
+        <a href="dashboard.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">📊 Dashboard</a>
+        <a href="layers.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">🛰 Asset Layers</a>
+        <a href="claims.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">📂 Claims Database</a>
+        <p class="mt-4 text-gray-400 text-xs uppercase">System</p>
+        <a href="status.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">💻 System Status</a>
+        <a href="settings.html" class="px-3 py-2 rounded-lg hover:bg-green-800 block">⚙️ Settings</a>
+      </nav>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-xs text-gray-300">
+      <p>Status: <span class="text-green-400">● Online</span></p>
+      <p>Version: v1.0.0</p>
+      <p>Environment: Development</p>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 space-y-6 overflow-auto bg-gray-50">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-green-800">Claim Extraction Dashboard</h2>
+      <div class="flex items-center gap-3">
+        <input type="text" placeholder="🔍 Search claims, villages..." class="px-3 py-1.5 rounded border border-gray-300 text-sm focus:outline-none"/>
+        <a href="upload.html" class="px-3 py-2 rounded bg-green-600 hover:bg-green-500 text-sm text-white">⬆ Upload</a>
+        <a href="notifications.html">🔔<span class="text-red-500 text-xs">2</span></a>
+        <a href="profile.html">👤</a>
+      </div>
+    </div>
+
+    <!-- 1. Summary of Uploaded Data -->
+    <div class="bg-white border border-green-200 rounded-xl p-6 shadow space-y-3">
+      <h3 class="text-green-700 font-semibold text-lg">Claim Summary</h3>
+      <p><strong>Form Type:</strong> <span id="formType">Land Claim Form</span></p>
+      <p><strong>Claimant Name:</strong> <span id="claimantName">Sundar Kumar</span></p>
+      <p><strong>Location:</strong> <span id="location">Jharbeda, Dhalai, Tripura</span></p>
+      <p><strong>Area of Land:</strong> <span id="area">2.45 Acres</span></p>
+      <!-- <p><strong>Additional Info:</strong> <span id="additionalInfo">N/A</span></p> -->
+    </div>
+
+    <!-- 2. AI-Generated Policy Suggestions -->
+    <div class="bg-white border border-green-200 rounded-xl p-6 shadow space-y-3">
+      <h3 class="text-green-700 font-semibold text-lg">AI-Generated Policy Suggestions</h3>
+      <ul class="list-disc list-inside text-sm text-gray-700">
+        <li>Policy 1: PM Kisan Yojna</li>
+        <li>Policy 2: MGNREGA</li>
+        <li>Policy 3: DAJGUA</li>
+      </ul>
+    </div>
+
+    <!-- 3. Editable Extracted Data Form -->
+    <div class="bg-white border border-green-200 rounded-xl p-6 shadow space-y-3">
+      <h3 class="text-green-700 font-semibold text-lg">Edit Extracted Data</h3>
+      <form action="claims.html" method="POST" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Form Type</label>
+          <input type="text" name="form_type" value="Land Claim Form" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Claimant Name</label>
+          <input type="text" name="claimant_name" value="Sundar Kumar" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Location</label>
+          <input type="text" name="location" value="Jharbeda, Dhalai, Tripura" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Area of Land</label>
+          <input type="text" name="area" value="2.45 Acres" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"/>
+        </div>
+        <!-- <div>
+          <label class="block text-sm font-medium text-gray-700">Additional Info</label>
+          <textarea name="additional_info" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">N/A</textarea>
+        </div> -->
+        <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm">💾 Save Claim</button>
+      </form>
+    </div>
+
+  </main>
+</body>
+</html>

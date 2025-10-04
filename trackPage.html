@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampoorna – Track Claim Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #f7f9fb;
+        }
+
+        /* Color definitions from index.html */
+        :root {
+            --color-primary-green: #10b981;
+            --color-secondary-green: #059669;
+            --color-accent-orange: #f97316;
+            --color-authority-blue: #1E40AF;
+        }
+
+        /* Step Indicator Styling (Retained in JS for logic, but visual component removed) */
+        .step-rejected {
+            background-color: #dc2626;
+            /* Red 600 */
+            box-shadow: 0 4px 8px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Custom shadow for the search card */
+        .search-card-shadow {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-green': 'var(--color-primary-green)',
+                        'secondary-green': 'var(--color-secondary-green)',
+                        'accent-orange': 'var(--color-accent-orange)',
+                        'authority-blue': 'var(--color-authority-blue)',
+                    }
+                }
+            }
+        }
+
+        // --- Simulated Claim Status Logic ---
+        // NOTE: The visual progress bar HTML has been removed, but the underlying
+        // JS logic remains to easily switch between statuses (Processing/Approved/Rejected).
+        function setStepStatus(stepId, className, labelText) {
+            // Function no longer modifies DOM elements, but is required to prevent JS errors.
+            // In a real application, this function and associated cleanup loops would be deleted.
+            return;
+        }
+
+        function checkClaimStatus() {
+            const claimId = document.getElementById('claimId').value.trim().toUpperCase();
+            const resultsContainer = document.getElementById('resultsContainer');
+            const alertBox = document.getElementById('alertBox');
+            const statusDetailCard = document.getElementById('statusDetailCard');
+
+            // Clear previous results/alerts
+            resultsContainer.classList.add('hidden');
+            alertBox.classList.add('hidden');
+            alertBox.innerHTML = '';
+            statusDetailCard.innerHTML = '';
+
+            // Reset specific data points for clean refresh
+            const resetData = () => {
+                document.getElementById('grantedArea').textContent = '2.87';
+                document.getElementById('overlapStatus').textContent = 'Minor Forest Buffer Overlap';
+                document.getElementById('overlapStatus').classList.remove('text-primary-green', 'text-red-600');
+                document.getElementById('overlapStatus').classList.add('text-accent-orange');
+                document.getElementById('recIntervention').textContent = 'PM-KISAN & Jal Jeevan Mission';
+            };
+
+            // Simulate logic
+            if (claimId === 'FRA12345' || claimId === '54321') {
+                // --- STATUS: PROCESSING (Stage 4 Active) ---
+                document.getElementById('resultClaimId').textContent = claimId;
+                resultsContainer.classList.remove('hidden');
+                resetData();
+
+                statusDetailCard.innerHTML = `
+                    <div class="p-6 bg-authority-blue/10 rounded-xl border-l-6 border-authority-blue shadow-lg">
+                        <p class="text-xl font-bold text-authority-blue mb-1">CURRENT STATUS: PROCESSING</p>
+                        <p class="text-2xl font-extrabold text-gray-800">WebGIS Integration & Conflict Check</p>
+                        <p class="text-gray-700 mt-2 font-medium">The digital patta boundary has been successfully mapped via drone/satellite data and is being cross-referenced with Revenue and Forest Department records for conflict resolution. No action is required from the claimant at this stage.</p>
+                        <p class="text-sm font-semibold text-gray-500 mt-3">Expected completion date: 2024-12-15</p>
+                    </div>
+                `;
+
+            } else if (claimId === 'FRA99999') {
+                // --- STATUS: APPROVED (Stage 5 Complete) ---
+                document.getElementById('resultClaimId').textContent = claimId;
+                resultsContainer.classList.remove('hidden');
+                resetData();
+
+                statusDetailCard.innerHTML = `
+                    <div class="p-6 bg-green-100 rounded-xl border-l-6 border-secondary-green shadow-xl">
+                        <p class="text-2xl font-extrabold text-secondary-green mb-3 flex items-center">
+                            <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-11.618 10.04m16.894 6.944a11.955 11.955 0 01-16.894 0M10 18h4m-4 4h4"></path></svg>
+                            CLAIM APPROVED! Congratulations, Smt. Janki Devi.
+                        </p>
+                        <p class="text-xl font-medium text-gray-800 mb-4">
+                            Your **2.87 acres** have been officially granted.
+                        </p>
+                        <button onclick="alert('Simulating Patta Download...')" class="px-8 py-3 rounded-full text-lg font-bold text-white bg-secondary-green hover:bg-primary-green transition-colors shadow-lg shadow-secondary-green/50">
+                            Download Official Patta →
+                        </button>
+                        <p class="text-sm text-gray-600 mt-4">The DSS engine has also flagged your land for immediate inclusion in PM-KISAN benefits.</p>
+                    </div>
+                `;
+                // Update specific data points for granted status
+                document.getElementById('overlapStatus').textContent = 'No Overlap (Resolved)';
+                document.getElementById('overlapStatus').classList.remove('text-accent-orange');
+                document.getElementById('overlapStatus').classList.add('text-primary-green');
+                document.getElementById('recIntervention').textContent = 'PM-KISAN & Jal Jeevan Mission (Active)';
+
+
+            } else if (claimId === 'FRA00000') {
+                // --- STATUS: REJECTED (Stage 5 Complete, failed) ---
+                document.getElementById('resultClaimId').textContent = claimId;
+                resultsContainer.classList.remove('hidden');
+                resetData();
+
+                statusDetailCard.innerHTML = `
+                    <div class="p-6 bg-red-100 rounded-xl border-l-6 border-red-600 shadow-xl">
+                        <p class="text-2xl font-extrabold text-red-700 mb-3 flex items-center">
+                            <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            CLAIM REJECTED. Decision Finalized on 2024-11-05.
+                        </p>
+                        <div class="bg-white p-4 rounded-lg my-4 border border-red-200">
+                            <p class="text-lg font-bold text-red-600">REASON FOR REJECTION (WebGIS Conflict):</p>
+                            <p class="text-gray-700 mt-1">The claimed area of **2.87 acres** significantly overlaps with an officially designated Reserved Forest Buffer zone (as confirmed by the WebGIS layer), violating Section 4(5) of the FRA 2006. The overlap is greater than the permissible limit of 0.5 hectares.</p>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-4">You have the right to appeal this decision. Please use the button below to initiate the next steps.</p>
+                        <button onclick="alert('Redirecting to Appeal Filing Form...')" class="px-8 py-3 rounded-full text-lg font-bold text-white bg-red-600 hover:bg-red-700 transition-colors shadow-lg shadow-red-500/50">
+                            File Appeal / Next Steps →
+                        </button>
+                    </div>
+                `;
+                // Reset specific data points
+                document.getElementById('grantedArea').textContent = '0.00';
+                document.getElementById('overlapStatus').textContent = 'Major Forest Buffer Overlap';
+                document.getElementById('overlapStatus').classList.remove('text-primary-green', 'text-accent-orange');
+                document.getElementById('overlapStatus').classList.add('text-red-600');
+                document.getElementById('recIntervention').textContent = 'None (Claim Rejected)';
+
+            } else if (claimId) {
+                // Simulated Not Found/Error
+                alertBox.innerHTML = '<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg font-medium">Claim ID "' + claimId + '" not found. Please verify the ID and try again, or check the multi-lingual guide for application help.</div>';
+                alertBox.classList.remove('hidden');
+            } else {
+                // Empty input error
+                alertBox.innerHTML = '<div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg font-medium">Please enter a valid Claim ID or Mobile Number to proceed.</div>';
+                alertBox.classList.remove('hidden');
+            }
+        }
+    </script>
+</head>
+
+<body class="text-gray-900 min-h-screen">
+
+    <!-- Navbar - Simple and Direct -->
+    <nav class="bg-white/95 backdrop-blur-md border-b-2 border-authority-blue/10 py-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="text-2xl font-extrabold flex items-center space-x-2">
+                <a href="index.html" class="text-authority-blue hover:text-secondary-green transition-all duration-300">
+                    SAMP<span class="text-secondary-green">OORNA</span>
+                </a>
+            </div>
+            <a href="index.html"
+                class="px-4 py-2 rounded-full text-sm font-semibold text-authority-blue border-2 border-authority-blue hover:bg-blue-50 transition-colors">
+                ← Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="bg-white py-12 border-b border-gray-200">
+        <div class="max-w-5xl mx-auto px-6">
+            <h1 class="text-4xl font-extrabold text-authority-blue mb-2">Track Your FRA Patta Claim</h1>
+            <p class="text-lg text-gray-600">Enter your official Claim ID or registered Mobile Number to see its
+                real-time progress through verification and digitization.</p>
+        </div>
+    </section>
+
+    <!-- Claim Search & Apply Section (Updated with Dual Action) -->
+    <section class="py-12 px-6">
+        <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- TRACK EXISTING CLAIM (2/3 width) -->
+            <div
+                class="lg:col-span-2 bg-white p-8 rounded-xl shadow-2xl search-card-shadow border-t-8 border-accent-orange">
+                <h2 class="text-2xl font-bold mb-4 text-accent-orange flex items-center">
+                    <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    Track Existing Application
+                </h2>
+                <p class="text-gray-600 mb-6">Enter your Claim ID or Mobile Number to view the status and detailed AI
+                    verification data.</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <!-- ENTER Key functionality added here -->
+                    <input type="text" id="claimId" placeholder="Enter Claim ID (e.g., FRA12345, FRA99999, FRA00000)"
+                        onkeydown="if(event.key === 'Enter') checkClaimStatus()"
+                        class="flex-grow p-4 border-2 border-gray-300 rounded-lg focus:border-authority-blue focus:ring-authority-blue text-lg" />
+                    <button onclick="checkClaimStatus()"
+                        class="px-8 py-4 rounded-lg text-lg font-bold text-white bg-accent-orange hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:translate-y-[-1px]">
+                        Check Status
+                    </button>
+                </div>
+                <div id="alertBox" class="mt-6 hidden">
+                    <!-- Alerts will appear here -->
+                </div>
+            </div>
+
+            <!-- START NEW APPLICATION (1/3 width) -->
+            <div
+                class="lg:col-span-1 bg-gradient-to-b from-primary-green to-secondary-green p-8 rounded-xl shadow-2xl search-card-shadow text-white flex flex-col justify-between hover:shadow-primary-green/50 transition duration-300 transform hover:scale-[1.02]">
+                <div>
+                    <h2 class="text-2xl font-bold mb-3 flex items-center">
+                        <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="12" y1="18" x2="12" y2="12"></line>
+                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                        </svg>
+                        Apply Fresh Claim
+                    </h2>
+                    <p class="text-sm font-medium opacity-90 mb-6">Start a new Individual (IFR) or Community (CR) Forest
+                        Rights application.</p>
+                </div>
+                <a href="walkthrough.html"
+                    class="w-full text-center px-6 py-3 rounded-full text-lg font-bold text-secondary-green bg-white hover:bg-gray-200 transition-all duration-300 shadow-lg transform hover:scale-[1.05]">
+                    Start Application →
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Results Container (Hidden by Default) -->
+    <section id="resultsContainer" class="py-12 px-6 hidden">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-extrabold text-gray-800 mb-8">
+                Claim Status for: <span id="resultClaimId" class="text-secondary-green"></span>
+            </h2>
+
+            <!-- DYNAMIC STATUS CARD INJECTION POINT (Replaces the pipeline visualizer) -->
+            <div id="statusDetailCard" class="mb-12">
+                <!-- Content will be dynamically injected by JavaScript for Processing/Approved/Rejected statuses -->
+            </div>
+
+
+            <!-- 2. AI & Geo-Spatial Verification Details (Highlights the Tech) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                <!-- Claim Summary Card -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-accent-orange">
+                    <h3 class="text-2xl font-bold text-accent-orange mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                            <line x1="4" y1="22" x2="4" y2="15"></line>
+                        </svg>
+                        Claim Summary
+                    </h3>
+                    <dl class="text-gray-700 space-y-3">
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">Claimant Name:</dt>
+                            <dd class="font-medium">Smt. Janki Devi W/O Ramdas</dd>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">Village/Gram Sabha:</dt>
+                            <dd class="font-medium">Chintamani Tola, Balaghat</dd>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">District/State:</dt>
+                            <dd class="font-medium">Balaghat / Madhya Pradesh</dd>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">Right Type:</dt>
+                            <dd class="font-medium">IFR (Individual Forest Right)</dd>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">Area Claimed (Acres):</dt>
+                            <dd id="grantedArea" class="font-medium text-accent-orange font-extrabold">2.87</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <!-- AI/GIS Data Card -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-secondary-green">
+                    <h3 class="text-2xl font-bold text-secondary-green mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1010 10A10 10 0 0012 2z"></path>
+                            <path d="M12 2v20"></path>
+                            <path d="M2 12h20"></path>
+                        </svg>
+                        AI & GIS Verification Data
+                    </h3>
+                    <dl class="text-gray-700 space-y-3">
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">NER Extraction Confidence:</dt>
+                            <dd class="font-medium text-primary-green font-extrabold">99.1%</dd>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">AI Asset Mapping Result:</dt>
+                            <dd class="font-medium text-primary-green">Farming Land Verified</dd>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">Water Index Score (Vulnerability):</dt>
+                            <dd class="font-medium">0.65 (Medium Stress)</dd>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">WebGIS Overlap Status:</dt>
+                            <dd id="overlapStatus" class="font-medium text-accent-orange">Minor Forest Buffer Overlap
+                            </dd>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <dt class="font-semibold">Recommended Intervention (DSS):</dt>
+                            <dd id="recIntervention" class="font-medium text-authority-blue font-bold">PM-KISAN & Jal
+                                Jeevan Mission</dd>
+                        </div>
+                    </dl>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer - Simple -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2025 Sampoorna | Ministry of Tribal Affairs (MoTA). All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

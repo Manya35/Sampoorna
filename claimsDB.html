@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampoorna – Claims Database & Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Using Font Awesome for professional icons -->
+    <script src="https://kit.fontawesome.com/4d6b3f02d1.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        /* Status Color Definitions (Matching the original green/yellow/red theme) */
+        .status-verified {
+            background-color: #d1fae5;
+            /* green-100 */
+            color: #047857;
+            /* secondary-green equivalent */
+            border: 1px solid #10b981;
+        }
+
+        .status-processing {
+            background-color: #fffbeb;
+            /* yellow-100 */
+            color: #b45309;
+            /* orange/yellow dark */
+            border: 1px solid #fbbf24;
+        }
+
+        .status-rejected {
+            background-color: #fee2e2;
+            /* red-100 */
+            color: #dc2626;
+            /* red-600 */
+            border: 1px solid #f87171;
+        }
+
+        .status-review {
+            background-color: #f3e8ff;
+            /* purple-100 */
+            color: #8b5cf6;
+            /* purple-500 */
+            border: 1px solid #a78bfa;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // Custom colors are implicitly defined by the existing Tailwind classes used in the HTML
+                    colors: {
+                        'green-800': '#065f46',
+                        'green-600': '#059669',
+                        'green-700': '#047857',
+                        'green-50': '#f7fdf7',
+                        'green-100': '#dcfce7',
+                        'yellow-600': '#ca8a04',
+                        'purple-600': '#9333ea',
+                    }
+                }
+            }
+        }
+
+        // Hardcoded data with detailed reasons for the modal
+        const claimDetails = {
+            'MP-7890': {
+                status: 'Verified',
+                reason: 'Patta granted. **Geo-verified** (100% match, no forest overlap). DSS flags high eligibility for PM-KISAN.',
+                date: '24/09/2025',
+                area: '3.12 acres'
+            },
+            'OR-1011': {
+                status: 'Processing',
+                reason: 'Pending FDC field inspection report. AI extraction of legacy record complete. GIS boundary delineation finalized.',
+                date: '10/10/2025',
+                area: '1.90 acres'
+            },
+            'TR-2233': {
+                status: 'Rejected',
+                reason: 'Claim boundary shows **75% overlap with Critical Wildlife Habitat (Tiger Reserve Buffer)**. Claim is eligible for re-evaluation if boundary is adjusted.',
+                date: '01/10/2025',
+                area: '4.50 acres'
+            },
+            'TG-4455': {
+                status: 'Verified',
+                reason: 'Patta granted. **CFR rights registered for community**. Asset mapping showed new pond construction possible under Jal Jeevan Mission.',
+                date: '15/09/2025',
+                area: '2.05 acres'
+            },
+            'OR-6677': {
+                status: 'Under Review',
+                reason: 'Document Discrepancy: Scanned area (OCR: 5.50 ac) differs significantly from legacy record (4.80 ac). Requires BDO/RFO human-in-the-loop validation.',
+                date: '05/10/2025',
+                area: '5.50 acres'
+            }
+        };
+
+        function showDetails(fraNumber) {
+            const detail = claimDetails[fraNumber];
+            const modal = document.getElementById('detailsModal');
+            document.getElementById('modalTitle').innerText = `Claim Details: ${fraNumber}`;
+
+            // Apply correct status class to modal status badge
+            const statusClass = `status-${detail.status.toLowerCase().replace(/\s+/g, '')}`;
+            document.getElementById('modalStatus').innerHTML = `<span class="px-2 py-1 rounded-full text-xs font-semibold ${statusClass}">${detail.status}</span>`;
+
+            document.getElementById('modalContent').innerHTML = `
+                <p class="text-sm text-gray-600 mb-2">Claim ID: <span class="font-bold text-gray-800">${fraNumber}</span></p>
+                <p class="text-sm text-gray-600 mb-4">Area Claimed: <span class="font-bold text-gray-800">${detail.area}</span></p>
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h4 class="font-extrabold text-green-700 mb-2">Reason / AI Insight:</h4>
+                    <p class="text-gray-700 text-sm">${detail.reason}</p>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').classList.add('hidden');
+        }
+
+        // Add Enter key functionality to search field
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('claimSearch');
+            searchInput.addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    // In a real app, this would trigger AJAX to filter the table
+                    alert(`Simulating search for: ${searchInput.value}`);
+                }
+            });
+        });
+    </script>
+</head>
+
+<body class="bg-green-50 text-gray-800 min-h-screen flex font-sans">
+
+    <!-- Sidebar (User's original styling) -->
+    <aside class="w-1/5 min-w-[220px] bg-green-800 text-white shadow-lg flex flex-col justify-between p-6">
+        <div>
+            <div class="flex items-center gap-3">
+                <div class="text-3xl">📡</div>
+                <h1 class="text-xl font-bold">Sampoorna</h1>
+            </div>
+            <p class="text-green-200 text-xs mt-1">Mission Control</p>
+
+            <!-- Navigation -->
+            <nav class="mt-6 flex flex-col gap-2 text-sm">
+                <a href="https://ananyaahujatech.github.io/webgis/"
+                    class="px-3 py-2 rounded-lg hover:bg-green-700 block">🗺 FRA Atlas</a>
+                <a href="extractData.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">📄 Document Upload</a>
+                <a href="dashboard.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">📊 Dashboard</a>
+                <a href="layers.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">🛰 Asset Layers</a>
+                <a href="claims.html" class="px-3 py-2 rounded-lg bg-green-600 block">📂 Claims Database</a>
+                <p class="mt-4 text-green-300 text-xs uppercase">System</p>
+                <a href="status.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">💻 System Status</a>
+                <a href="settings.html" class="px-3 py-2 rounded-lg hover:bg-green-700 block">⚙️ Settings</a>
+            </nav>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-xs text-green-200">
+            <p>Status: <span class="text-green-400">● Online</span></p>
+            <p>Version: v1.0.0</p>
+            <p>Environment: Development</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 space-y-6 overflow-auto">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-green-700">FRA Claims Database</h2>
+            <button
+                class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-sm text-white flex items-center gap-2 shadow">
+                <i class="fas fa-file-export"></i> Export Data
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid md:grid-cols-4 gap-4">
+            <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+                <p class="text-sm text-gray-500">Total Claims</p>
+                <h2 class="text-2xl font-bold text-green-700">5</h2>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+                <p class="text-sm text-gray-500">Verified & Granted</p>
+                <h2 class="text-2xl font-bold text-green-600">2</h2>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+                <p class="text-sm text-gray-500">Processing</p>
+                <h2 class="text-2xl font-bold text-yellow-600">1</h2>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow border border-green-200">
+                <p class="text-sm text-gray-500">Under Review/Rejected</p>
+                <h2 class="text-2xl font-bold text-purple-600">2</h2>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div
+            class="bg-white rounded-xl p-4 shadow border border-green-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div class="flex gap-3 w-full md:w-auto">
+                <input type="text" id="claimSearch" placeholder="🔍 Search by FRA No., Name, or District"
+                    class="flex-grow px-3 py-2 rounded-lg border border-green-300 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500" />
+                <select
+                    class="px-3 py-2 rounded-lg border border-green-300 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <option>All Status</option>
+                    <option>Verified</option>
+                    <option>Processing</option>
+                    <option>Rejected</option>
+                    <option>Under Review</option>
+                </select>
+            </div>
+            <select
+                class="px-3 py-2 rounded-lg border border-green-300 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 w-full md:w-auto">
+                <option>All States</option>
+                <option>Madhya Pradesh</option>
+                <option>Odisha</option>
+                <option>Tripura</option>
+                <option>Telangana</option>
+            </select>
+        </div>
+
+        <!-- Claims Table -->
+        <div class="bg-white rounded-xl shadow border border-green-200 overflow-x-auto">
+            <table class="w-full text-sm text-left table-auto">
+                <thead class="bg-green-100 text-green-700 uppercase text-xs">
+                    <tr>
+                        <th class="px-4 py-3">FRA No. (ID)</th>
+                        <th class="px-4 py-3">Claimant Name</th>
+                        <th class="px-4 py-3">State</th>
+                        <th class="px-4 py-3">District</th>
+                        <th class="px-4 py-3">Area (Acres)</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3 text-center">Details & Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-green-100">
+
+                    <!-- Row 1: Verified (MP) -->
+                    <tr class="hover:bg-green-50">
+                        <td class="px-4 py-3 font-medium text-gray-800">MP-7890</td>
+                        <td class="px-4 py-3">Ramesh Gond</td>
+                        <td class="px-4 py-3">Madhya Pradesh</td>
+                        <td class="px-4 py-3">Balaghat</td>
+                        <td class="px-4 py-3">3.12</td>
+                        <td class="px-4 py-3"><span
+                                class="px-2 py-1 rounded-full text-xs font-semibold status-verified">✔ Verified</span>
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <button onclick="showDetails('MP-7890')"
+                                class="text-green-600 hover:text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Row 2: Processing (Odisha) -->
+                    <tr class="hover:bg-green-50">
+                        <td class="px-4 py-3 font-medium text-gray-800">OR-1011</td>
+                        <td class="px-4 py-3">Smt. Devi</td>
+                        <td class="px-4 py-3">Odisha</td>
+                        <td class="px-4 py-3">Sundargarh</td>
+                        <td class="px-4 py-3">1.90</td>
+                        <td class="px-4 py-3"><span
+                                class="px-2 py-1 rounded-full text-xs font-semibold status-processing">...Processing</span>
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <button onclick="showDetails('OR-1011')"
+                                class="text-green-600 hover:text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Row 3: Rejected (Tripura) -->
+                    <tr class="hover:bg-green-50">
+                        <td class="px-4 py-3 font-medium text-gray-800">TR-2233</td>
+                        <td class="px-4 py-3">Anil Debbarma</td>
+                        <td class="px-4 py-3">Tripura</td>
+                        <td class="px-4 py-3">Dhalai</td>
+                        <td class="px-4 py-3">4.50</td>
+                        <td class="px-4 py-3"><span
+                                class="px-2 py-1 rounded-full text-xs font-semibold status-rejected">✗ Rejected</span>
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <button onclick="showDetails('TR-2233')"
+                                class="text-green-600 hover:text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Row 4: Verified (Telangana) -->
+                    <tr class="hover:bg-green-50">
+                        <td class="px-4 py-3 font-medium text-gray-800">TG-4455</td>
+                        <td class="px-4 py-3">K. Narsimha</td>
+                        <td class="px-4 py-3">Telangana</td>
+                        <td class="px-4 py-3">Khammam</td>
+                        <td class="px-4 py-3">2.05</td>
+                        <td class="px-4 py-3"><span
+                                class="px-2 py-1 rounded-full text-xs font-semibold status-verified">✔ Verified</span>
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <button onclick="showDetails('TG-4455')"
+                                class="text-green-600 hover:text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Row 5: Under Review (Odisha) -->
+                    <tr class="hover:bg-green-50">
+                        <td class="px-4 py-3 font-medium text-gray-800">OR-6677</td>
+                        <td class="px-4 py-3">P. Mallik</td>
+                        <td class="px-4 py-3">Odisha</td>
+                        <td class="px-4 py-3">Mayurbhanj</td>
+                        <td class="px-4 py-3">5.50</td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-semibold status-review">•
+                                Review</span></td>
+                        <td class="px-4 py-3 text-center">
+                            <button onclick="showDetails('OR-6677')"
+                                class="text-green-600 hover:text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div class="px-4 py-3 text-gray-600 text-sm flex justify-between bg-green-50 border-t border-green-200">
+                <span>Showing 1 to 5 of 5 results</span>
+                <span>Page 1 of 1</span>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal for Claim Details (Simulated Action Reason) -->
+    <div id="detailsModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 hidden flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-lg w-full">
+            <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-4">
+                <h3 id="modalTitle" class="text-xl font-bold text-green-700">Claim Details</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            </div>
+            <div class="space-y-4">
+                <p class="font-bold">Status: <span id="modalStatus" class="ml-2"></span></p>
+                <div id="modalContent">
+                    <!-- Content populated by showDetails function -->
+                </div>
+                <button onclick="closeModal()"
+                    class="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg mt-4">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
